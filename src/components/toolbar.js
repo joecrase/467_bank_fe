@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -32,7 +33,13 @@ export default function ButtonAppBar() {
           <Typography variant="h6" className={classes.title}>
             CALF Co. Parts Store
           </Typography>
-          <Button color="inherit">Login</Button>
+          <IconButton
+            variant="link"
+            color="default"
+            href="/cart">
+            <ShoppingCartIcon />
+          </IconButton>
+          <Button color="inherit" href="/login">Login</Button>
         </Toolbar>
       </AppBar>
     </div>
