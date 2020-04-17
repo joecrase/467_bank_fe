@@ -6,6 +6,8 @@ import Cart from './pages/cart.js';
 import SignIn from './pages/login.js'
 import Checkout from './pages/checkout/checkout.js';
 import WareWorkStation from './components/warehousework.js'
+import WareHouseFillList from './components/warehouseFillList.js'
+import WareHouseShipping from './components/warehouseshipping.js'
 import {
   BrowserRouter as Router,
   Switch,
@@ -29,6 +31,8 @@ function App() {
         <Route path="/checkout">
           <Checkout />
         </Route>
+        <Route path="/warehousework/productfilling" component={WareHouseFillList}/>
+        <Route path="/warehousework/shippingLabel" component={WareHouseShipping}/>
         <Route path="/warehousework">
           <WareWorkStation />
         </Route>

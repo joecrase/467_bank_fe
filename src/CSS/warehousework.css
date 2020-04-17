@@ -59,5 +59,19 @@
 }
 
 .hidden {
-    display: none;
+    display: none !important;
+}
+
+.fillOrderButton {
+    display: block;
+    margin: auto;
+    margin-bottom: 20px;
+}
+
+.green {
+    background-color: green;
+}
+
+.red {
+    background-color: red;
 }

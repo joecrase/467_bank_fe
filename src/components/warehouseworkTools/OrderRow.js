@@ -34,7 +34,7 @@ function OrderTableRow(props) {
             <button onClick={() => viewOrder()} className="viewOrderBut">View Order</button>
           </div>
         </div>
-        <ProductTable show={viewOrderClicked}/>
+        <ProductTable orderID={props.orderID} show={viewOrderClicked} fillorder={false}/>
       </div>
     );
 }
