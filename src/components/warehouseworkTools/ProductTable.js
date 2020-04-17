@@ -78,7 +78,7 @@ function ProductTable(props) {
                 orderID: props.orderID
             }
             }}>
-                <button onClick={() => updateOrderStatus("Shipped")} disabled={!allProductsFullfiled} className={"fillOrderButton " + (props.fillorder ? '' : 'hidden') + (allProductsFullfiled ? 'green' : 'red')}>All Orders Fulfilled</button>
+                <button onClick={() => updateOrderStatus("Shipped")} disabled={!allProductsFullfiled} className={"fillOrderButton " + (props.fillorder ? '' : 'hidden ') + (allProductsFullfiled ? 'green' : 'red')}>All Orders Fulfilled</button>
             </Link>
         </div>
     );
