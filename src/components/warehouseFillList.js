@@ -17,7 +17,7 @@ function WareHouseFillList(props) {
       <div>
         <div className="workerTitle">Calf Co Warehouse Interface</div>
         <div className="orderIDTitleCard">Order ID {props.location.state.orderID} Product List</div>
-        <ProductTable show={true} fillorder={true} orderID={props.location.state.orderID}/>
+        <ProductTable show={true} fillorder={true} orderID={props.location.state.orderID} cart={props.cart || props.location.state.cart}/>
       </div>
     </div>
   );

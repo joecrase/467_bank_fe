@@ -1,10 +1,44 @@
 import React, { useState, useEffect } from 'react';
 import "./../CSS/warehousework.css"
 import OrderTableRow from "./warehouseworkTools/OrderRow.js"
+import axios from 'axios';
 
 function WareWorkStation() {
   // Declare a new state variable, which we'll call "count"
-  //const ProductInfoTable = useRef(null);
+  const [allOrders, setAllOrders] = useState([]);
+
+  useEffect(() => {
+    console.log("You are in the useeffect")
+    getAllOrders()
+  }, []);
+
+  function getAllOrders()
+  {
+    axios.get('http://localhost:8080/order/all')
+    .then(function (response) {
+      console.log(response)
+      setAllOrders(response.data)
+  });
+  }
+
+  function sumItemTotal(item)
+  {
+    var total = 0
+    for(var index = 0; index < item.length; index++)
+    {
+      total = total + item[index].amount
+    }
+    return total
+  }
+
+  function renderOrderRows()
+  {
+    console.log("Result")
+    console.log(allOrders)
+    return allOrders.map(function(item, i){
+    return <OrderTableRow id={i} orderID={item.id} orderDate={item.datePurchased} distinctProducts={item.cart.length} totalProducts={sumItemTotal(item.cart)} orderStatus={item.orderStatus} cart={item.cart}/>
+    })
+  }
 
   return (
     <div>
@@ -27,12 +61,7 @@ function WareWorkStation() {
             Order Status
           </div>
         </div>
-        <OrderTableRow id={1} orderID={"hj43kj435kjbl453"} orderDate={"3/27/1998"} distinctProducts={3}
-        totalProducts={27} orderStatus={"Open"}/>
-        <OrderTableRow id={2} orderID={"4j5hj23h63hj56g"} orderDate={"4/11/2019"} distinctProducts={2}
-        totalProducts={14} orderStatus={"Open"}/>
-        <OrderTableRow id={2} orderID={"4j5hj23h63hj56g"} orderDate={"4/11/2019"} distinctProducts={2}
-        totalProducts={14} orderStatus={"Open"}/>
+        {renderOrderRows()}
       </div>
     </div>
   );

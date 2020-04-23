@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import "./../../CSS/warehousework.css"
 import ProductRow from "./ProductRow.js"
 import { Link } from 'react-router-dom'
+import axios from 'axios';
 
 function ProductTable(props) {
 
@@ -10,14 +11,19 @@ function ProductTable(props) {
 
     function updateOrderStatus(status)
     {
-        //make a axios call here to change the order id's status
+        //TODO make a axios call here to change the order id's status
         console.log("You wish to change orderid " + props.orderID + " to " + status)
+        // /updateStatus/{orderId}/{orderStatus}
+
+        axios.post('http://localhost:8080/order/updateStatus/' + props.orderID + '/' + status)
+            .then(function (response) {
+            });
+
     }
 
     function checkIfAllProductFullfiled (conditional)
     {
-        var goal = 3; // how we will find this is by taking the length of the array of compoenets when we
-                      // store it into a state
+        var goal = props.cart.length;
 
         var currentTotal = null
         if(conditional == true)
@@ -46,6 +52,14 @@ function ProductTable(props) {
         }
     }
 
+    function renderProductRows() {
+        console.log("Here is the cart")
+        console.log(props.cart)
+        return props.cart.map(function(item, i){ //TODO Ask Josph to put product name with the response with the order
+            return <ProductRow productID={item.partId} prodName={"Cookies"} quantity={item.amount} fillorder={props.fillorder} checkmarkProduct={checkIfAllProductFullfiled}/>
+        })
+    }
+
     return (
         <div className={"tableRow " + (props.show ? '' : 'hidden')}>
             <div className="newTable">
@@ -60,17 +74,16 @@ function ProductTable(props) {
                         Quantity
                     </div>
                 </div>
-                <ProductRow productID={"k5j43lk3"} prodName={"Cookies"} quantity={10} fillorder={props.fillorder} checkmarkProduct={checkIfAllProductFullfiled}/>
-                <ProductRow productID={"fj4n345"} prodName={"Milk"} quantity={10} fillorder={props.fillorder} checkmarkProduct={checkIfAllProductFullfiled}/>
-                <ProductRow productID={"hb3245b"} prodName={"Fudge"} quantity={7} fillorder={props.fillorder} checkmarkProduct={checkIfAllProductFullfiled}/>
+                {renderProductRows()}
             </div>
             <Link to={{
             pathname:"/warehousework/productfilling",
             state: {
-                orderID: props.orderID
+                orderID: props.orderID, 
+                cart: props.cart
             }
             }}>
-                <button onClick={() => updateOrderStatus("Filling")} className={"fillOrderButton " + (props.fillorder ? 'hidden' : '')}>Begin Filling</button>
+                <button onClick={() => updateOrderStatus("Filling")} className={"fillOrderButton " + (props.fillorder ? 'hidden' : '')}>Begin Filling</button> {/* TODO 1. fix buttons so they dont extend so much. 2. add another button that will direct to shipping label if authorized */}
             </Link>
             <Link to={{
             pathname:"/warehousework/shippingLabel",
