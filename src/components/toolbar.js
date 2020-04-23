@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function ButtonAppBar() {
+export default function ButtonAppBar(props) {
   const classes = useStyles();
 
   return (
@@ -36,7 +36,7 @@ export default function ButtonAppBar() {
           <IconButton
             variant="link"
             color="default"
-            href="/cart">
+            onClick={() => props.changeView("Cart")}>
             <ShoppingCartIcon />
           </IconButton>
           <Button color="inherit" href="/login">Login</Button>

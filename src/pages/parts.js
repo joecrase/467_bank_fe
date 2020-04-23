@@ -24,10 +24,9 @@ export default class Parts extends Component {
     }
   }
 
-  addToCart() {
-    console.log("Add to cart here");
-        
-  }
+  addToCart(part) {
+    this.props.addPart(part)
+}
 
   componentDidMount() {
     document.title = "CALF Co. Parts Store";
@@ -58,7 +57,7 @@ export default class Parts extends Component {
                       </Typography>
                     </CardContent>
                     <CardActions>
-                      <Button size="small" onClick={e => this.addToCart()}>
+                      <Button size="small" onClick={e => this.addToCart(parts)}>
                         Add To Cart
                       </Button>
                     </CardActions>
