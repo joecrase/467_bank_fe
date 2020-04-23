@@ -5,6 +5,7 @@ import Toolbar from './components/toolbar.js';
 import Cart from './pages/cart.js';
 import SignIn from './pages/login.js'
 import Checkout from './pages/checkout/checkout.js';
+import Recieve from './pages/recieving/recieve.js';
 import {
   BrowserRouter as Router,
   Switch,
@@ -25,6 +26,9 @@ function App() {
         </Route>
         <Route path="/checkout">
           <Checkout />
+        </Route>
+        <Route path="/recieve">
+          <Recieve />
         </Route>
         <Route path="/">
           <div className="App">
