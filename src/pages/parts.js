@@ -21,15 +21,39 @@ export default class Parts extends Component {
       parts: [],
       fullPrice: 0,
       fullWeight: 0,
+      quantity: 0,
     }
+    this.handleChange = this.handleChange.bind(this)
   }
 
   addToCart(part) {
-    this.props.addPart(part)
+    console.log("You want this many items " + this.state.quantity)
+    var temp =[]
+    for(var i = 0; i < this.state.quantity; i++)
+    {
+      temp.push(part)
+    }
+    console.log(temp)
+    this.props.addPart(temp)
 }
 
   componentDidMount() {
     document.title = "CALF Co. Parts Store";
+  }
+
+  handleChange(event) {
+    //console.log(event)
+    //console.log("You want this many items " + event.target.value)
+    const re = /^[0-9\b]+$/;
+
+    if (event.target.value === '' || re.test(event.target.value)) {
+       this.setState({quantity: event.target.value})
+       console.log("state is set")
+    }
+    else
+    {
+      event.target.value = ''
+    }
   }
     
   render() {
@@ -60,6 +84,7 @@ export default class Parts extends Component {
                       <Button size="small" onClick={e => this.addToCart(parts)}>
                         Add To Cart
                       </Button>
+                      <input type="text" value={this.state.quantity} onChange={this.handleChange}/>
                     </CardActions>
                   </Card>
                 </Grid>
