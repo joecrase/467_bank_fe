@@ -27,26 +27,7 @@ function createData(
     };
 }
 
-const rows = [
-    createData(1, 'Joseph', 'Crase', 12.2, '2020/04/11', 20.0, 'authorized'),
-    createData(2, 'Emily', 'Holiday', 64.02, '2020/01/15', 150.0, 'shipped'),
-    createData(3, 'Carolynn', 'DeGire', 2.07, '2019/08/22', 15.3, 'filling'),
-    createData(4, 'Leonard', 'LaCroix', 209.34, '2020/09/03', 600.0, 'shipped'),
-    createData(5, 'Lisa', 'Redwood', 22.22, '2020/05/04', 50.78, 'authorized'),
-    createData(
-        6,
-        'Johnny',
-        'Appleseed',
-        42.39,
-        '2020/03/22',
-        100.09,
-        'filling'
-    ),
-    createData(7, 'Bob', 'Belcher', 5.05, '2020/03/20', 20.67, 'shipped'),
-    createData(8, 'Isabel', 'Trapped', 78.39, '2020/04/20', 250.98, 'shipped'),
-    createData(9, 'Johnny', 'Appleseed', 20.35, '2020/03/06', 47.83, 'shipped'),
-    createData(10, 'Paul', 'Bunion', 47.39, '2019/03/24', 124.03, 'filling'),
-]; // temporary dummy data
+const rows = []; // temporary dummy data
 
 const columnHeaders = [
     'Order ID',
@@ -63,23 +44,43 @@ export default function AdminView() {
     const [allOrders, setAllOrders] = useState([]);
     const [query, setQuery] = useState('');
     const [selection, setSelection] = useState('');
+    const [loaded, setLoaded] = useState(false);
 
-    useEffect(() => {
-        axios
+    let display;
+
+    useEffect( () => {
+        async function getAllOrders() {
+            await axios
             .get('http://localhost:8080/order/all')
             .then(({ data }) => {
-                console.log(data);
+                data.forEach((element) => {
+                    rows.push(
+                        createData(
+                            element.id,
+                            element.customer.firstName,
+                            element.customer.lastName,
+                            element.weight,
+                            element.datePurchased,
+                            element.priceTotal,
+                            element.orderStatus
+                        )
+                    );
+                });
                 // setAllOrders(data); TODO: Get orders info from database
             })
             .catch((error) => {
                 console.log(error);
             });
+            setAllOrders(rows);
+            setLoaded(true);
+        }
 
-        setAllOrders(rows);
-        console.log(rows);
+        getAllOrders();
 
         return () => {};
     }, []);
+
+    
 
     function handleSearch(query) {
         setQuery(query);
@@ -88,31 +89,30 @@ export default function AdminView() {
     function handleSelection(selection) {
         switch (selection) {
             case columnHeaders[0]:
-                setSelection("orderId");
+                setSelection('orderId');
                 break;
             case columnHeaders[1]:
-                setSelection("firstName");
+                setSelection('firstName');
                 break;
             case columnHeaders[2]:
-                setSelection("lastName");
+                setSelection('lastName');
                 break;
             case columnHeaders[3]:
-                setSelection("totalWeight");
+                setSelection('totalWeight');
                 break;
             case columnHeaders[4]:
-                setSelection("dateProcessed");
+                setSelection('dateProcessed');
                 break;
             case columnHeaders[5]:
-                setSelection("totalPrice");
+                setSelection('totalPrice');
                 break;
             case columnHeaders[6]:
-                setSelection("orderStatus");
+                setSelection('orderStatus');
                 break;
             default:
                 console.log(selection);
                 break;
         }
-        
     }
 
     function handleButtonClick(value) {
@@ -121,7 +121,9 @@ export default function AdminView() {
         }
     }
 
-    let display = showShipping ? (
+    function displayTable() {}
+
+    display = showShipping ? (
         <div className='background'></div>
     ) : (
         <div className='background'>
@@ -136,7 +138,7 @@ export default function AdminView() {
             <div className='orderTable'>
                 <OrderTable
                     rows={allOrders.filter((entry) => {
-                        if(entry[selection] !== undefined)
+                        if (entry[selection] !== undefined)
                             return entry[selection].toString().includes(query);
                         return entry;
                     })}
