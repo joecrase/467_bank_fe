@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 
-import orderBy from "lodash.orderby"
 
 import OrderTable from './ViewOrderTable';
 import OrderSearch from './OrderSearch';
