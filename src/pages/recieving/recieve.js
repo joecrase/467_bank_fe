@@ -28,6 +28,9 @@ export default class Recieve extends Component {
   }
 
   handleSubmit = (event) => {
+
+    let submittingArray = [];
+
     for(var i = 1; i < 11; i++) {
       let item = "item" + i + "partId";
       let quantity = "quantity" + i + "toChangeAmount";
@@ -38,23 +41,26 @@ export default class Recieve extends Component {
           toChangeAmount : parseInt(this.state[quantity])
         }
 
-        this.state.submittingArray.push(update);
+        submittingArray.push(update);
       }
     }
 
-    console.log(this.state.submittingArray);
+    console.log(submittingArray);
     
-    const array = JSON.stringify(this.state.submittingArray);
+    const array = JSON.stringify(submittingArray);
 
     console.log(array);
-    
-    axios.post("http://localhost:8080/inventory/increment", {array})
-    .then(res => {
-      console.log(res.data);
+
+    axios({
+      method: 'post',
+      url: 'http://localhost:8080/inventory/increment',
+      data: submittingArray
     })
-    .catch((error) => {
+    .then ((response) => {
+      console.log(response);
+    }).catch((error) =>{
       console.log(error);
-    })
+    })  
   }
 
   render() {
