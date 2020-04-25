@@ -49,37 +49,38 @@ export default function AdminView() {
     let display;
 
     useEffect( () => {
-        async function getAllOrders() {
-            await axios
-            .get('http://localhost:8080/order/all')
-            .then(({ data }) => {
-                data.forEach((element) => {
-                    rows.push(
-                        createData(
-                            element.id,
-                            element.customer.firstName,
-                            element.customer.lastName,
-                            element.weight,
-                            element.datePurchased,
-                            element.priceTotal,
-                            element.orderStatus
-                        )
-                    );
-                });
-                // setAllOrders(data); TODO: Get orders info from database
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-            setAllOrders(rows);
-            setLoaded(true);
-        }
+        
 
         getAllOrders();
 
         return () => {};
     }, []);
 
+    async function getAllOrders() {
+        await axios
+        .get('http://localhost:8080/order/all')
+        .then(({ data }) => {
+            data.forEach((element) => {
+                rows.push(
+                    createData(
+                        element.id,
+                        element.customer.firstName,
+                        element.customer.lastName,
+                        element.weight,
+                        element.datePurchased,
+                        element.priceTotal,
+                        element.orderStatus
+                    )
+                );
+            });
+            // setAllOrders(data); TODO: Get orders info from database
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+        setAllOrders(rows);
+        setLoaded(true);
+    }
     
 
     function handleSearch(query) {
