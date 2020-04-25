@@ -13,6 +13,7 @@ export default function OrderSearch(props) {
 
     function handleSelectionChange(event) {
         setColumnSelected(event.target.value);
+        props.handleSelection(event.target.value);
     }
 
     return (

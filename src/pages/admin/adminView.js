@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 
-
 import OrderTable from './ViewOrderTable';
 import OrderSearch from './OrderSearch';
+import CustomToolbar from './CustomToolbar';
 
 import './../../CSS/adminView.css';
 import axios from 'axios';
@@ -48,15 +48,21 @@ const rows = [
     createData(10, 'Paul', 'Bunion', 47.39, '2019/03/24', 124.03, 'filling'),
 ]; // temporary dummy data
 
-const columnHeaders = ["Order ID", "First Name", "Last Name", "Total Weight", "Date Processed", "Total Price", "Order Status"];
-
-function handleSearch(query){
-    
-}
+const columnHeaders = [
+    'Order ID',
+    'First Name',
+    'Last Name',
+    'Total Weight',
+    'Date Processed',
+    'Total Price',
+    'Order Status',
+];
 
 export default function AdminView() {
+    const [showShipping, setShowShipping] = useState(false);
     const [allOrders, setAllOrders] = useState([]);
-    const [query, setQuery] = useState("")
+    const [query, setQuery] = useState('');
+    const [selection, setSelection] = useState('');
 
     useEffect(() => {
         axios
@@ -70,27 +76,81 @@ export default function AdminView() {
             });
 
         setAllOrders(rows);
+        console.log(rows);
 
         return () => {};
     }, []);
 
-    function handleSearch(query){
+    function handleSearch(query) {
         setQuery(query);
     }
 
-    return (
+    function handleSelection(selection) {
+        switch (selection) {
+            case columnHeaders[0]:
+                setSelection("orderId");
+                break;
+            case columnHeaders[1]:
+                setSelection("firstName");
+                break;
+            case columnHeaders[2]:
+                setSelection("lastName");
+                break;
+            case columnHeaders[3]:
+                setSelection("totalWeight");
+                break;
+            case columnHeaders[4]:
+                setSelection("dateProcessed");
+                break;
+            case columnHeaders[5]:
+                setSelection("totalPrice");
+                break;
+            case columnHeaders[6]:
+                setSelection("orderStatus");
+                break;
+            default:
+                console.log(selection);
+                break;
+        }
+        
+    }
+
+    function handleButtonClick(value) {
+        if (value === 'modifyShipping') {
+            setShowShipping(!showShipping);
+        }
+    }
+
+    let display = showShipping ? (
+        <div className='background'></div>
+    ) : (
         <div className='background'>
-            <div className='adminTitle'>Calf Co Admin Interface</div>
             <div className='orderSearch'>
-                <OrderSearch 
+                <OrderSearch
                     query={query}
                     columnHeaders={columnHeaders}
                     handleSearch={handleSearch}
-                    />
+                    handleSelection={handleSelection}
+                />
             </div>
             <div className='orderTable'>
-                <OrderTable rows={allOrders}/>
+                <OrderTable
+                    rows={allOrders.filter((entry) => {
+                        if(entry[selection] !== undefined)
+                            return entry[selection].toString().includes(query);
+                        return entry;
+                    })}
+                />
             </div>
+        </div>
+    );
+
+    return (
+        <div className='background'>
+            <div className='adminTitle'>
+                <CustomToolbar handleButtonClick={handleButtonClick} />
+            </div>
+            {display}
         </div>
     );
 }
