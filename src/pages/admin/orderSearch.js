@@ -1,38 +1,52 @@
-import React from 'react'
+import React, { useState } from 'react';
 
-import SelectField from '@material-ui/core/Select';
+import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import TextField from '@material-ui/core/TextField';
+import FormControl from '@material-ui/core/FormControl';
+import FormHelperText from '@material-ui/core/FormHelperText';
 
-export default function orderSearch() {
+import './../../CSS/adminView.css';
+
+export default function OrderSearch(props) {
+    const [columnSelected, setColumnSelected] = useState('');
+
+    function handleSelectionChange(event) {
+        setColumnSelected(event.target.value);
+    }
+
     return (
         <div>
             <div style={{ display: 'flex' }}>
                 <div style={{ display: 'flex', margin: 'auto' }}>
-                    <TextField
-                        hintText='Query'
-                        floatingLabelText='Query'
-                        // value={this.state.query}
-                        // onChange={(e) =>
-                        //     this.setState({ query: e.target.value })
-                        // }
-                    />
-                    <SelectField
-                        style={{ marginLeft: '1em' }}
-                        floatingLabelText='Select a column'
-                        // value={this.state.columnToQuery}
-                        value = "Default"
-                        // onChange={(event, index, value) =>
-                        //     this.setState({ columnToQuery: value })
-                        // }
-                        >
-                        <MenuItem value='firstName' primaryText='First Name' />
-                        <MenuItem value='lastName' primaryText='Last Name' />
-                        <MenuItem value='username' primaryText='Username' />
-                        <MenuItem value='email' primaryText='Email' />
-                    </SelectField>
+                    <div className='selectField'>
+                        <TextField
+                        value={props.query}
+                        onChange={(e) =>
+                            props.handleSearch(e.target.value)
+                         }
+                        />
+                    </div>
+                    <div className='selectField'>
+                        <FormControl>
+                            <Select
+                                value={columnSelected}
+                                onChange={handleSelectionChange}
+                                displayEmpty
+                                inputProps={{ 'aria-label': 'Without label' }}>
+                                {props.columnHeaders.map((entry) => {
+                                    return (
+                                        <MenuItem value={entry}>
+                                            {entry}
+                                        </MenuItem>
+                                    );
+                                })}
+                            </Select>
+                            <FormHelperText>Column Select</FormHelperText>
+                        </FormControl>
+                    </div>
                 </div>
             </div>
         </div>
-    )
+    );
 }

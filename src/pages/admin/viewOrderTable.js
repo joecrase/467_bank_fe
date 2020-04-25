@@ -21,38 +21,38 @@ import Switch from '@material-ui/core/Switch';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
 
-function createData(
-    orderId,
-    firstName,
-    lastName,
-    totalWeight,
-    dateProcessed,
-    totalPrice,
-    orderStatus
-) {
-    return {
-        orderId,
-        firstName,
-        lastName,
-        totalWeight,
-        dateProcessed,
-        totalPrice,
-        orderStatus,
-    };
-}
+// function createData(
+//     orderId,
+//     firstName,
+//     lastName,
+//     totalWeight,
+//     dateProcessed,
+//     totalPrice,
+//     orderStatus
+// ) {
+//     return {
+//         orderId,
+//         firstName,
+//         lastName,
+//         totalWeight,
+//         dateProcessed,
+//         totalPrice,
+//         orderStatus,
+//     };
+// }
 
-const rows = [
-    createData(1, 'Joseph', 'Crase', 12.2, '2020/04/11', 20.0, 'authorized'),
-    createData(2, 'Emily', 'Holiday', 64.02, '2020/01/15', 150.0, 'shipped'),
-    createData(3, 'Carolynn', 'DeGire', 2.07, '2019/08/22', 15.3, 'filling'),
-    createData(4, 'Leonard', 'LaCroix', 209.34, '2020/09/03', 600.0, 'shipped'),
-    createData(5, 'Lisa', 'Redwood', 22.22, '2020/05/04', 50.78, 'authorized'),
-    createData(6, 'Johnny', 'Appleseed', 42.39, '2020/03/22', 100.09, 'filling'),
-    createData(7, 'Bob', 'Belcher', 5.05, '2020/03/20', 20.67, 'shipped'),
-    createData(8, 'Isabel', 'Trapped', 78.39, '2020/04/20', 250.98, 'shipped'),
-    createData(9, 'Johnny', 'Appleseed', 20.35, '2020/03/06', 47.83, 'shipped'),
-    createData(10, 'Paul', 'Bunion', 47.39, '2019/03/24', 124.03, 'filling'),
-]; // will be filled with formated order stuff
+// const rows = [
+//     createData(1, 'Joseph', 'Crase', 12.2, '2020/04/11', 20.0, 'authorized'),
+//     createData(2, 'Emily', 'Holiday', 64.02, '2020/01/15', 150.0, 'shipped'),
+//     createData(3, 'Carolynn', 'DeGire', 2.07, '2019/08/22', 15.3, 'filling'),
+//     createData(4, 'Leonard', 'LaCroix', 209.34, '2020/09/03', 600.0, 'shipped'),
+//     createData(5, 'Lisa', 'Redwood', 22.22, '2020/05/04', 50.78, 'authorized'),
+//     createData(6, 'Johnny', 'Appleseed', 42.39, '2020/03/22', 100.09, 'filling'),
+//     createData(7, 'Bob', 'Belcher', 5.05, '2020/03/20', 20.67, 'shipped'),
+//     createData(8, 'Isabel', 'Trapped', 78.39, '2020/04/20', 250.98, 'shipped'),
+//     createData(9, 'Johnny', 'Appleseed', 20.35, '2020/03/06', 47.83, 'shipped'),
+//     createData(10, 'Paul', 'Bunion', 47.39, '2019/03/24', 124.03, 'filling'),
+// ]; // will be filled with formated order stuff
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -275,7 +275,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function EnhancedTable() {
+export default function EnhancedTable(props) {
     const classes = useStyles();
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('OrderID');
@@ -292,7 +292,7 @@ export default function EnhancedTable() {
 
     const handleSelectAllClick = (event) => {
         if (event.target.checked) {
-            const newSelecteds = rows.map((n) => n.orderId);
+            const newSelecteds = props.rows.map((n) => n.orderId);
             setSelected(newSelecteds);
             return;
         }
@@ -335,7 +335,8 @@ export default function EnhancedTable() {
     const isSelected = (name) => selected.indexOf(name) !== -1;
 
     const emptyRows =
-        rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
+        rowsPerPage -
+        Math.min(rowsPerPage, props.rows.length - page * rowsPerPage);
 
     return (
         <div className={classes.root}>
@@ -354,16 +355,21 @@ export default function EnhancedTable() {
                             orderBy={orderBy}
                             onSelectAllClick={handleSelectAllClick}
                             onRequestSort={handleRequestSort}
-                            rowCount={rows.length}
+                            rowCount={props.rows.length}
                         />
                         <TableBody>
-                            {stableSort(rows, getComparator(order, orderBy))
+                            {stableSort(
+                                props.rows,
+                                getComparator(order, orderBy)
+                            )
                                 .slice(
                                     page * rowsPerPage,
                                     page * rowsPerPage + rowsPerPage
                                 )
                                 .map((row, index) => {
-                                    const isItemSelected = isSelected(row.orderId);
+                                    const isItemSelected = isSelected(
+                                        row.orderId
+                                    );
                                     const orderId = `enhanced-table-checkbox-${index}`;
 
                                     return (
@@ -427,7 +433,7 @@ export default function EnhancedTable() {
                 <TablePagination
                     rowsPerPageOptions={[5, 10, 25]}
                     component='div'
-                    count={rows.length}
+                    count={props.rows.length}
                     rowsPerPage={rowsPerPage}
                     page={page}
                     onChangePage={handleChangePage}
