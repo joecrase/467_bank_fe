@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import OrderTable from './ViewOrderTable';
 import OrderSearch from './OrderSearch';
 import CustomToolbar from './CustomToolbar';
+import ModifyShippingCost from './ModifyShippingCost';
 
 import './../../CSS/adminView.css';
 import axios from 'axios';
@@ -42,46 +43,59 @@ const columnHeaders = [
 export default function AdminView() {
     const [showShipping, setShowShipping] = useState(false);
     const [allOrders, setAllOrders] = useState([]);
+    const [shippingCosts, setShippingCosts] = useState([]);
     const [query, setQuery] = useState('');
     const [selection, setSelection] = useState('');
     const [loaded, setLoaded] = useState(false);
+    const [shippingLoaded, setShippingLoaded] = useState(false);
 
     let display;
+    let table;
 
-    useEffect( () => {
-        
-
+    useEffect(() => {
         getAllOrders();
+        getAllShippingCosts();
 
         return () => {};
     }, []);
 
     async function getAllOrders() {
         await axios
-        .get('http://localhost:8080/order/all')
-        .then(({ data }) => {
-            data.forEach((element) => {
-                rows.push(
-                    createData(
-                        element.id,
-                        element.customer.firstName,
-                        element.customer.lastName,
-                        element.weight,
-                        element.datePurchased,
-                        element.priceTotal,
-                        element.orderStatus
-                    )
-                );
+            .get('http://localhost:8080/order/all')
+            .then(({ data }) => {
+                data.forEach((element) => {
+                    rows.push(
+                        createData(
+                            element.id,
+                            element.customer.firstName,
+                            element.customer.lastName,
+                            element.weight,
+                            element.datePurchased,
+                            element.priceTotal,
+                            element.orderStatus
+                        )
+                    );
+                });
+            })
+            .catch((error) => {
+                console.log(error);
             });
-            // setAllOrders(data); TODO: Get orders info from database
-        })
-        .catch((error) => {
-            console.log(error);
-        });
         setAllOrders(rows);
         setLoaded(true);
     }
-    
+
+    async function getAllShippingCosts() {
+
+        await axios
+            .get('http://localhost:8080/shippingCost/all')
+            .then(({ data }) => {
+                setShippingCosts(data);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+            setShippingLoaded(true)
+    }
 
     function handleSearch(query) {
         setQuery(query);
@@ -117,15 +131,21 @@ export default function AdminView() {
     }
 
     function handleButtonClick(value) {
-        if (value === 'modifyShipping') {
+        if (value === 'Modify Shipping' || value === 'View Orders') {
             setShowShipping(!showShipping);
         }
     }
 
     function displayTable() {}
 
-    display = showShipping ? (
-        <div className='background'></div>
+    table = showShipping ? (
+        <div className='background'>
+            <div className='shippingCost'>
+                <ModifyShippingCost
+                 shippingCosts={shippingCosts}
+                 />
+            </div>
+        </div>
     ) : (
         <div className='background'>
             <div className='orderSearch'>
@@ -148,10 +168,15 @@ export default function AdminView() {
         </div>
     );
 
+    display = (loaded && shippingLoaded) ? (table) : ("");
+
     return (
         <div className='background'>
             <div className='adminTitle'>
-                <CustomToolbar handleButtonClick={handleButtonClick} />
+                <CustomToolbar
+                    handleButtonClick={handleButtonClick}
+                    showShipping={showShipping}
+                />
             </div>
             {display}
         </div>

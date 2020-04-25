@@ -6,6 +6,10 @@
 .adminTitle {
 }
 
+.shippingCost {
+    margin:2vh
+}
+
 .orderTable {
     padding-top: 2vh;
     padding-right: 1vh;

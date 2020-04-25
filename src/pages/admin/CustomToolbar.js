@@ -30,12 +30,12 @@ export default function CustomToolbar(props) {
                         Admin Portal
                     </Typography>
                     <Button
-                        value='modifyShipping'
+                        value={props.showShipping ? "View Orders" : "Modify Shipping"}
                         color='inherit'
                         onClick={(event) =>
                             props.handleButtonClick(event.currentTarget.value)
                         }>
-                        Modify Shipping
+                        {props.showShipping ? "View Orders" : "Modify Shipping"}
                     </Button>
                 </Toolbar>
             </AppBar>
