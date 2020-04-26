@@ -2,7 +2,9 @@ export const parts = [
     {
       number: 1,
       description: "windshield w/ polymer",
+      info: "Good for your windowss", 
       price: 178.76,
+      totalAv: 7,
       weight: 0.55,
       picture: "http://blitz.cs.niu.edu/pics/shi.jpg"
     },

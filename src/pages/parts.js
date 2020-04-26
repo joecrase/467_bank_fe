@@ -77,7 +77,13 @@ export default class Parts extends Component {
                         {parts.description}
                       </Typography>
                       <Typography>
+                        {parts.info}
+                      </Typography>
+                      <Typography>
                         ${parts.price}
+                      </Typography>
+                      <Typography>
+                        Total Avalible: {parts.totalAv}
                       </Typography>
                     </CardContent>
                     <CardActions>
