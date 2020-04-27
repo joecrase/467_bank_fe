@@ -52,22 +52,31 @@ const useStyles = makeStyles((theme) => ({
 
 const steps = ['Shipping address', 'Payment details', 'Review your order'];
 
-function getStepContent(step) {
-  switch (step) {
-    case 0:
-      return <AddressForm />;
-    case 1:
-      return <PaymentForm />;
-    case 2:
-      return <Review />;
-    default:
-      throw new Error('Unknown step');
-  }
-}
-
-export default function Checkout() {
+export default function Checkout(props) {
   const classes = useStyles();
   const [activeStep, setActiveStep] = React.useState(0);
+  const [cart, setCart] = React.useState(props.location.state.cart);
+  const [productPrice, setProductPrice] = React.useState(props.location.state.productPrice);
+  const [shippingInfo, setShippingInfo] = React.useState({
+      firstName: "",
+      lastName: "",
+      address1: "", 
+      email: "",
+      city: "",
+      state: "",
+      zip: "",
+      country: ""
+  });
+  const [paymentInfo, setPaymentInfo] = React.useState(
+    {
+      cardName: "",
+      cardNumber: "", //NOTE IF THE DEFAULT VALUES CHANGE IN THE TEXTBOX THIS MUST BE CHANGED AS WELL
+      expDate: "",
+      cvv: ""
+    });
+
+  React.useEffect(() => {
+  }, []);
 
   const handleNext = () => {
     setActiveStep(activeStep + 1);
@@ -77,13 +86,31 @@ export default function Checkout() {
     setActiveStep(activeStep - 1);
   };
 
+  const makeAuthorization = () => {
+    console.log("Make the order call here with the given info")
+    handleNext()
+  }
+
+  function getStepContent(step) {
+    switch (step) {
+      case 0:
+        return <AddressForm setShippingInfo={setShippingInfo}/>;
+      case 1:
+        return <PaymentForm setPaymentInfo={setPaymentInfo}/>;
+      case 2:
+        return <Review shippingInfo={shippingInfo} paymentInfo={paymentInfo} cart={cart} productPrice={productPrice}/>;
+      default:
+        throw new Error('Unknown step');
+    }
+  }
+
   return (
     <React.Fragment>
       <CssBaseline />
       <main className={classes.layout}>
         <Paper className={classes.paper}>
           <Typography component="h1" variant="h4" align="center">
-            Checkout
+            Checkout {paymentInfo.cvv/*shippingInfo.firstName TODO test to make sure we dont have to render this*/}
           </Typography>
           <Stepper activeStep={activeStep} className={classes.stepper}>
             {steps.map((label) => (
@@ -115,7 +142,7 @@ export default function Checkout() {
                   <Button
                     variant="contained"
                     color="primary"
-                    onClick={handleNext}
+                    onClick={activeStep === steps.length - 1 ? makeAuthorization : handleNext} /*handleNext*/
                     className={classes.button}
                   >
                     {activeStep === steps.length - 1 ? 'Place order' : 'Next'}

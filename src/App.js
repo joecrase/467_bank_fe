@@ -20,8 +20,7 @@ export default class App extends Component {
         <Route path="/login">
           <SignIn />
         </Route>
-        <Route path="/checkout">
-          <Checkout />
+        <Route path="/checkout" component={Checkout}>
         </Route>
       </Switch>
     </Router>

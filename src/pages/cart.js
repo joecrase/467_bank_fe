@@ -1,13 +1,12 @@
 import React, {Component} from 'react';
-import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
+import { Link } from 'react-router-dom'
 import './parts.css';
 
 export default class Cart extends Component {
@@ -57,7 +56,7 @@ export default class Cart extends Component {
           count++;
       }
       uniqueInventory[i].count = count
-      totalPrice = totalPrice + (uniqueInventory[i].part.price * uniqueInventory[i].count)
+      totalPrice = totalPrice + (uniqueInventory[i].part.price * uniqueInventory[i].count) // TODO add shipping price here. call route for getShippingCost by passing in the weight
     }
     console.log(uniqueInventory)
     this.setState({
@@ -91,7 +90,7 @@ export default class Cart extends Component {
     }
   }
 
-  renderList(){ // TODO put the cart info here
+  renderList(){ 
     return(
       <main>
       <Container className="cardGrid" maxWidth="lg">
@@ -136,8 +135,20 @@ export default class Cart extends Component {
       <CssBaseline />
       {this.renderList()}
       <div className="totalCost">
-        Total: {this.state.totalPrice}
+        Your Total Is: {this.state.totalPrice}
       </div>
+      <div className="checkoutButton">
+        <Link to={{
+            pathname:"/checkout",
+            state: {
+                productPrice: this.state.totalPrice, 
+                cart: this.state.inventoryDesc
+            }
+            }}>
+          <button disabled={this.state.exceedsInventory}> Checkout</button>
+        </Link>
+      </div>
+      {/*TODO add a render here for the creditCard authenticator */}
     </React.Fragment>
   )
   }
