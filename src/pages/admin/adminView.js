@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
-import OrderTable from './ViewOrderTable';
-import OrderSearch from './OrderSearch';
+import OrderTable from './viewOrderTable';
+import OrderSearch from './orderSearch';
 import CustomToolbar from './CustomToolbar';
 import ModifyShippingCost from './ModifyShippingCost';
 

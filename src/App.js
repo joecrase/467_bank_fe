@@ -8,7 +8,7 @@ import Checkout from './pages/checkout/checkout.js';
 import WareWorkStation from './components/warehousework.js';
 import WareHouseFillList from './components/warehouseFillList.js';
 import WareHouseShipping from './components/warehouseshipping.js';
-import AdminView from './pages/admin/AdminView.js';
+import AdminView from './pages/admin/adminView.js';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 function App() {
