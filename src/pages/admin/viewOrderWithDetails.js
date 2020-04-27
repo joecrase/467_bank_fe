@@ -82,7 +82,7 @@ export default function ViewOrderWithDetails(props) {
             <MaterialTable
                 title='Order'
                 icons={tableIcons}
-                options={{ search: false, pageSize: 20 }}
+                options={{ search: false, pageSize: 5 }}
                 columns={[
                     { title: 'Order ID', field: 'orderId' },
                     { title: 'First Name', field: 'firstName' },

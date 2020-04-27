@@ -36,24 +36,10 @@ export default function OrderSearch(props) {
         <div>
             <div style={{ display: 'flex' }}>
                 <div style={{ display: 'flex', margin: 'auto' }}>
-                    <div className='selectField'>
+                    <div className='textField'>
                         <TextField
-                            style={{
-                                backgroundColor: 'black',
-                            }}
-                            InputProps={{
-                                style: {
-                                    padding: '1vh',
-                                    color: 'white',
-                                    borderRadius: 3,
-                                    borderWidth: 10,
-                                    borderColor: ' rgba(256, 256, 256, 1)',
-                                    height: 48,
-                                    boxShadow:
-                                        '0 0px 0px 2px rgba(256, 256, 256, 1)',
-                                },
-                            }}
                             id='outlined-basic'
+                            label='Search'
                             defaultValue='Search Field'
                             value={props.query}
                             onChange={(e) => props.handleSearch(e.target.value)}
@@ -63,16 +49,6 @@ export default function OrderSearch(props) {
                         <FormControl>
                             <Select
                                 className='Select'
-                                style={{
-                                    padding: '1vh',
-                                    color: 'white',
-                                    borderRadius: 3,
-                                    borderWidth: 10,
-                                    borderColor: ' rgba(256, 256, 256, 1)',
-                                    height: 48,
-                                    boxShadow:
-                                        '0 0px 0px 2px rgba(256, 256, 256, 1)',
-                                }}
                                 value={columnSelected}
                                 onChange={handleSelectionChange}
                                 displayEmpty>

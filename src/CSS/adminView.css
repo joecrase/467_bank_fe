@@ -1,9 +1,6 @@
 .background{
-    background-color:black;
+    background-color:white;
     padding-bottom: 50vh;
-}
-
-.adminTitle {
 }
 
 .shippingCost {
@@ -30,12 +27,6 @@
     margin-top: 10%;
 }
 
-.Select{
-    background-color: 'white' !important
-}
-.MenuItem{
-    background-color: 'green' !important
-}
-
-.searchText{
+.textField{
+    margin-top: 5%
 }
