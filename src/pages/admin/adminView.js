@@ -136,8 +136,6 @@ export default function AdminView() {
         }
     }
 
-    function displayTable() {}
-
     table = showShipping ? (
         <div className='background'>
             <div className='shippingCost'>
