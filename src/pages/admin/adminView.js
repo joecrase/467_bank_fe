@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 import OrderTable from './viewOrderTable';
+import OrderTableWithDetails from './viewOrderWithDetails';
 import OrderSearch from './orderSearch';
 import CustomToolbar from './CustomToolbar';
 import ModifyShippingCost from './ModifyShippingCost';
@@ -28,7 +29,16 @@ function createData(
     };
 }
 
+function createRowData(orderId, part, amount) {
+    return {
+        orderId,
+        part,
+        amount
+    };
+}
+
 const rows = []; // temporary dummy data
+const rowData = [];
 
 const columnHeaders = [
     'Order ID',
@@ -43,6 +53,7 @@ const columnHeaders = [
 export default function AdminView() {
     const [showShipping, setShowShipping] = useState(false);
     const [allOrders, setAllOrders] = useState([]);
+    const [allFullOrders, setAllFullOrders] = useState([]);
     const [shippingCosts, setShippingCosts] = useState([]);
     const [query, setQuery] = useState('');
     const [selection, setSelection] = useState('');
@@ -63,6 +74,8 @@ export default function AdminView() {
         await axios
             .get('http://localhost:8080/order/all')
             .then(({ data }) => {
+                setAllFullOrders(data);
+                
                 data.forEach((element) => {
                     rows.push(
                         createData(
@@ -85,7 +98,6 @@ export default function AdminView() {
     }
 
     async function getAllShippingCosts() {
-
         await axios
             .get('http://localhost:8080/shippingCost/all')
             .then(({ data }) => {
@@ -94,7 +106,7 @@ export default function AdminView() {
             .catch((error) => {
                 console.log(error);
             });
-            setShippingLoaded(true)
+        setShippingLoaded(true);
     }
 
     function handleSearch(query) {
@@ -139,9 +151,7 @@ export default function AdminView() {
     table = showShipping ? (
         <div className='background'>
             <div className='shippingCost'>
-                <ModifyShippingCost
-                 shippingCosts={shippingCosts}
-                 />
+                <ModifyShippingCost shippingCosts={shippingCosts} />
             </div>
         </div>
     ) : (
@@ -155,18 +165,19 @@ export default function AdminView() {
                 />
             </div>
             <div className='orderTable'>
-                <OrderTable
-                    rows={allOrders.filter((entry) => {
+                <OrderTableWithDetails
+                    data={allOrders.filter((entry) => {
                         if (entry[selection] !== undefined)
                             return entry[selection].toString().includes(query);
                         return entry;
                     })}
+                    fullData={allFullOrders}
                 />
             </div>
         </div>
     );
 
-    display = (loaded && shippingLoaded) ? (table) : ("");
+    display = loaded && shippingLoaded ? table : '';
 
     return (
         <div className='background'>

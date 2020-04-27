@@ -56,6 +56,8 @@ export default function ModifyShippingCost(props) {
     });
 
     const [loaded, setLoaded] = useState(false);
+    const [OrderDetails, setOrderDetails] = useState([]);
+
 
     useEffect(() => {
         if (loaded) {

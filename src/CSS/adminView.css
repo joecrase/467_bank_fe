@@ -1,5 +1,5 @@
 .background{
-    background-color:white;
+    background-color:black;
     padding-bottom: 50vh;
 }
 
@@ -16,7 +16,26 @@
     padding-left: 1vh;
 }
 
+.partTable {
+    padding: 2vh
+}
+
+.detailPanel {
+    text-align: center;
+    background-color: black;
+}
+
 .selectField{
     margin-left: 15%;
     margin-top: 10%;
+}
+
+.Select{
+    background-color: 'white' !important
+}
+.MenuItem{
+    background-color: 'green' !important
+}
+
+.searchText{
 }

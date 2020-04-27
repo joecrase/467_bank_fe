@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { lighten, makeStyles } from '@material-ui/core/styles';
@@ -48,42 +48,41 @@ function stableSort(array, comparator) {
 }
 
 const headCells = [
-    { id: 'orderId', numeric: false, disablePadding: true, label: 'Order ID' },
     {
-        id: 'firstName',
+        id: 'number',
         numeric: true,
-        disablePadding: false,
-        label: 'First Name',
+        disablePadding: true,
+        label: 'Part Number',
     },
     {
-        id: 'lastName',
+        id: 'description',
         numeric: true,
         disablePadding: false,
-        label: 'Last Name',
+        label: 'Description',
     },
     {
-        id: 'totalWeight',
+        id: 'price',
         numeric: true,
         disablePadding: false,
-        label: 'Total Weight',
+        label: 'Price',
     },
     {
-        id: 'dateProcessed',
+        id: 'weight',
         numeric: true,
         disablePadding: false,
-        label: 'Date Processed',
+        label: 'Weight',
     },
     {
-        id: 'totalPrice',
+        id: 'pictureURL',
         numeric: true,
         disablePadding: false,
-        label: 'Total Price',
+        label: 'Picture URL',
     },
     {
-        id: 'orderStatus',
+        id: 'amountPurchased',
         numeric: true,
         disablePadding: false,
-        label: 'Order Status',
+        label: 'Amount Purchased',
     },
 ];
 
@@ -104,16 +103,6 @@ function EnhancedTableHead(props) {
     return (
         <TableHead>
             <TableRow>
-                <TableCell padding='checkbox'>
-                    <Checkbox
-                        indeterminate={
-                            numSelected > 0 && numSelected < rowCount
-                        }
-                        checked={rowCount > 0 && numSelected === rowCount}
-                        onChange={onSelectAllClick}
-                        inputProps={{ 'aria-label': 'select all orders' }}
-                    />
-                </TableCell>
                 {headCells.map((headCell) => (
                     <TableCell
                         key={headCell.id}
@@ -170,53 +159,7 @@ const useToolbarStyles = makeStyles((theme) => ({
     },
 }));
 
-const EnhancedTableToolbar = (props) => {
-    const classes = useToolbarStyles();
-    const { numSelected } = props;
 
-    return (
-        <Toolbar
-            className={clsx(classes.root, {
-                [classes.highlight]: numSelected > 0,
-            })}>
-            {numSelected > 0 ? (
-                <Typography
-                    className={classes.title}
-                    color='inherit'
-                    variant='subtitle1'
-                    component='div'>
-                    {numSelected} selected
-                </Typography>
-            ) : (
-                <Typography
-                    className={classes.title}
-                    variant='h6'
-                    id='tableTitle'
-                    component='div'>
-                    Orders
-                </Typography>
-            )}
-
-            {numSelected > 0 ? (
-                <Tooltip title='Delete'>
-                    <IconButton aria-label='delete'>
-                        <DeleteIcon />
-                    </IconButton>
-                </Tooltip>
-            ) : (
-                <Tooltip title='Filter list'>
-                    <IconButton aria-label='filter list'>
-                        <FilterListIcon />
-                    </IconButton>
-                </Tooltip>
-            )}
-        </Toolbar>
-    );
-};
-
-EnhancedTableToolbar.propTypes = {
-    numSelected: PropTypes.number.isRequired,
-};
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -245,11 +188,17 @@ const useStyles = makeStyles((theme) => ({
 export default function EnhancedTable(props) {
     const classes = useStyles();
     const [order, setOrder] = React.useState('asc');
-    const [orderBy, setOrderBy] = React.useState('OrderID');
+    const [orderBy, setOrderBy] = React.useState('number');
     const [selected, setSelected] = React.useState([]);
     const [page, setPage] = React.useState(0);
     const [dense, setDense] = React.useState(true);
-    const [rowsPerPage, setRowsPerPage] = React.useState(20);
+    const [rowsPerPage, setRowsPerPage] = React.useState(5);
+
+    useEffect((props) => {
+        console.log(props);
+        return () => {
+        }
+    }, [])
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -259,7 +208,7 @@ export default function EnhancedTable(props) {
 
     const handleSelectAllClick = (event) => {
         if (event.target.checked) {
-            const newSelecteds = props.rows.map((n) => n.orderId);
+            const newSelecteds = props.rows.map((n) => n.number);
             setSelected(newSelecteds);
             return;
         }
@@ -308,7 +257,6 @@ export default function EnhancedTable(props) {
     return (
         <div className={classes.root}>
             <Paper className={classes.paper}>
-                <EnhancedTableToolbar numSelected={selected.length} />
                 <TableContainer>
                     <Table
                         className={classes.table}
@@ -335,53 +283,39 @@ export default function EnhancedTable(props) {
                                 )
                                 .map((row, index) => {
                                     const isItemSelected = isSelected(
-                                        row.orderId
+                                        row.number
                                     );
-                                    const orderId = `enhanced-table-checkbox-${index}`;
+                                    const number = `enhanced-table-checkbox-${index}`;
 
                                     return (
                                         <TableRow
                                             hover
-                                            onClick={(event) =>
-                                                handleClick(event, row.orderId)
-                                            }
-                                            role='checkbox'
                                             aria-checked={isItemSelected}
                                             tabIndex={-1}
-                                            key={row.orderId}
-                                            selected={isItemSelected}>
-                                            <TableCell padding='checkbox'>
-                                                <Checkbox
-                                                    checked={isItemSelected}
-                                                    inputProps={{
-                                                        'aria-labelledby': orderId,
-                                                    }}
-                                                />
-                                            </TableCell>
+                                            key={row.number}
+                                            selected={isItemSelected}> 
                                             <TableCell
+                                                align='right'
                                                 component='th'
-                                                id={orderId}
+                                                id={number}
                                                 scope='row'
-                                                padding='none'>
-                                                {row.orderId}
+                                                padding= 'default'>
+                                                {row.number}
                                             </TableCell>
                                             <TableCell align='right'>
-                                                {row.firstName}
+                                                {row.description}
                                             </TableCell>
                                             <TableCell align='right'>
-                                                {row.lastName}
+                                                {row.price}
                                             </TableCell>
                                             <TableCell align='right'>
-                                                {row.totalWeight}
+                                                {row.weight}
                                             </TableCell>
                                             <TableCell align='right'>
-                                                {row.dateProcessed}
+                                                {row.pictureURL}
                                             </TableCell>
                                             <TableCell align='right'>
-                                                {row.totalPrice}
-                                            </TableCell>
-                                            <TableCell align='right'>
-                                                {row.orderStatus}
+                                                {row.amount}
                                             </TableCell>
                                         </TableRow>
                                     );

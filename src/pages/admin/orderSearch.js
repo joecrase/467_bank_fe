@@ -5,11 +5,27 @@ import MenuItem from '@material-ui/core/MenuItem';
 import TextField from '@material-ui/core/TextField';
 import FormControl from '@material-ui/core/FormControl';
 import FormHelperText from '@material-ui/core/FormHelperText';
-
+import { makeStyles } from '@material-ui/core/styles';
 import './../../CSS/adminView.css';
+
+const styles = (theme) => ({
+    select: {
+        '&:before': {
+            borderColor: 'white',
+        },
+        '&:after': {
+            borderColor: 'white',
+        },
+    },
+    icon: {
+        fill: 'white',
+    },
+});
 
 export default function OrderSearch(props) {
     const [columnSelected, setColumnSelected] = useState('');
+
+    const classes = styles;
 
     function handleSelectionChange(event) {
         setColumnSelected(event.target.value);
@@ -22,22 +38,49 @@ export default function OrderSearch(props) {
                 <div style={{ display: 'flex', margin: 'auto' }}>
                     <div className='selectField'>
                         <TextField
-                        value={props.query}
-                        onChange={(e) =>
-                            props.handleSearch(e.target.value)
-                         }
+                            style={{
+                                backgroundColor: 'black',
+                            }}
+                            InputProps={{
+                                style: {
+                                    padding: '1vh',
+                                    color: 'white',
+                                    borderRadius: 3,
+                                    borderWidth: 10,
+                                    borderColor: ' rgba(256, 256, 256, 1)',
+                                    height: 48,
+                                    boxShadow:
+                                        '0 0px 0px 2px rgba(256, 256, 256, 1)',
+                                },
+                            }}
+                            id='outlined-basic'
+                            defaultValue='Search Field'
+                            value={props.query}
+                            onChange={(e) => props.handleSearch(e.target.value)}
                         />
                     </div>
                     <div className='selectField'>
                         <FormControl>
                             <Select
+                                className='Select'
+                                style={{
+                                    padding: '1vh',
+                                    color: 'white',
+                                    borderRadius: 3,
+                                    borderWidth: 10,
+                                    borderColor: ' rgba(256, 256, 256, 1)',
+                                    height: 48,
+                                    boxShadow:
+                                        '0 0px 0px 2px rgba(256, 256, 256, 1)',
+                                }}
                                 value={columnSelected}
                                 onChange={handleSelectionChange}
-                                displayEmpty
-                                inputProps={{ 'aria-label': 'Without label' }}>
+                                displayEmpty>
                                 {props.columnHeaders.map((entry) => {
                                     return (
-                                        <MenuItem value={entry}>
+                                        <MenuItem
+                                            className='MenuItem'
+                                            value={entry}>
                                             {entry}
                                         </MenuItem>
                                     );
