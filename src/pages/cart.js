@@ -33,6 +33,7 @@ export default class Cart extends Component {
     var setOfIds = new Set()
     var uniqueInventory = []
     var totalPrice = 0
+    var fullWeight = 0
     for(let i = 0; i < currentCart.length; i++)
     {
       var lastSize = setOfIds.size
@@ -56,12 +57,14 @@ export default class Cart extends Component {
           count++;
       }
       uniqueInventory[i].count = count
-      totalPrice = totalPrice + (uniqueInventory[i].part.price * uniqueInventory[i].count) // TODO add shipping price here. call route for getShippingCost by passing in the weight
+      totalPrice = totalPrice + (uniqueInventory[i].part.price * uniqueInventory[i].count) 
+      fullWeight = fullWeight + (uniqueInventory[i].part.weight * uniqueInventory[i].count)
     }
     console.log(uniqueInventory)
     this.setState({
       inventoryDesc: uniqueInventory,
-      totalPrice: totalPrice
+      totalPrice: totalPrice,
+      fullWeight: fullWeight
     })
   }
 
@@ -135,20 +138,23 @@ export default class Cart extends Component {
       <CssBaseline />
       {this.renderList()}
       <div className="totalCost">
-        Your Total Is: {this.state.totalPrice}
+        Your Total Price Is: {this.state.totalPrice}
+      </div>
+      <div className="totalCost">
+        Your Total Weight Is: {this.state.fullWeight}
       </div>
       <div className="checkoutButton">
         <Link to={{
             pathname:"/checkout",
             state: {
                 productPrice: this.state.totalPrice, 
-                cart: this.state.inventoryDesc
+                cart: this.state.inventoryDesc, 
+                fullWeight: this.state.fullWeight
             }
             }}>
           <button disabled={this.state.exceedsInventory}> Checkout</button>
         </Link>
       </div>
-      {/*TODO add a render here for the creditCard authenticator */}
     </React.Fragment>
   )
   }

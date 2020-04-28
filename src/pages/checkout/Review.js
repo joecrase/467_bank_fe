@@ -12,6 +12,8 @@ const useStyles = makeStyles((theme) => ({
   },
   total: {
     fontWeight: 700,
+    marginRight: theme.spacing(2),
+    marginLeft: theme.spacing(2)
   },
   title: {
     marginTop: theme.spacing(2),
@@ -23,7 +25,7 @@ export default function Review(props) {
     { name: 'Card type', detail: 'Visa' },
     { name: 'Card holder', detail: props.paymentInfo.cardName },
     { name: 'Card number', detail: props.paymentInfo.cardNumber },
-    { name: 'Expiry date', detail: props.paymentInfo.expDate }, // TODO change info here with what is entered
+    { name: 'Expiry date', detail: props.paymentInfo.expDate }, 
   ];
   const classes = useStyles();
 
@@ -48,9 +50,17 @@ export default function Review(props) {
           </ListItem>
         ))}
         <ListItem className={classes.listItem}>
-          <ListItemText primary="Total" />
+          <ListItemText primary="Product Price" />
           <Typography variant="subtitle1" className={classes.total}>
             {props.productPrice/* TODO get shipping price and display it alongside here*/}
+          </Typography>
+          <ListItemText primary="Shipping Price" />
+          <Typography variant="subtitle2" className={classes.total}>
+            {props.shippingPrice/* TODO get shipping price and display it alongside here*/}
+          </Typography>
+          <ListItemText primary="Total Price"/>
+          <Typography variant="subtitle3" className={classes.total}>
+            {props.shippingPrice + props.productPrice/* TODO get shipping price and display it alongside here*/}
           </Typography>
         </ListItem>
       </List>

@@ -12,6 +12,7 @@ import Typography from '@material-ui/core/Typography';
 import AddressForm from './AddressForm';
 import PaymentForm from './PaymentForm';
 import Review from './Review.js';
+import axios from 'axios';
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -57,6 +58,8 @@ export default function Checkout(props) {
   const [activeStep, setActiveStep] = React.useState(0);
   const [cart, setCart] = React.useState(props.location.state.cart);
   const [productPrice, setProductPrice] = React.useState(props.location.state.productPrice);
+  const [fullWeight, setFullWeight] = React.useState(props.location.state.fullWeight);
+  const [shippingPrice, setShippingPrice] = React.useState(props.location.state.fullWeight);
   const [shippingInfo, setShippingInfo] = React.useState({
       firstName: "",
       lastName: "",
@@ -76,7 +79,18 @@ export default function Checkout(props) {
     });
 
   React.useEffect(() => {
+    console.log(cart)
+    getStateShippingPrice()
   }, []);
+
+  function getStateShippingPrice()
+  {
+    console.log("Here is the full weight " + fullWeight)
+    axios.get('http://localhost:8080/shippingCost/getCost/' + fullWeight)
+            .then(function (response) {
+              setShippingPrice(response.data)
+            });
+  }
 
   const handleNext = () => {
     setActiveStep(activeStep + 1);
@@ -85,9 +99,39 @@ export default function Checkout(props) {
   const handleBack = () => {
     setActiveStep(activeStep - 1);
   };
-
-  const makeAuthorization = () => {
+  //TODO look back at this with jospeh
+  async function makeAuthorization() {
+    //TODO, make autho order on backend and deincrements inventory of items
     console.log("Make the order call here with the given info")
+    await axios.post('http://localhost:8080/creditcard/auth/', {
+      params: {
+        cc: "6011 1234 4321 1234",
+	      name: paymentInfo.cardName,
+	      exp: paymentInfo.expDate,
+	      amount: (productPrice + shippingPrice)
+      }
+    })
+    .then(function (response) {
+      console.log("Autho made")
+      console.log(response)
+    })
+    .catch(function (err) {
+      console.log(err)
+    });
+
+    await Promise.all(cart.map(item =>
+      axios.post('http://localhost:8080/inventory/decrement/', {
+      params: {
+        partId: item.part.number,
+        toChangeAmount: item.count
+      }
+      })
+      .then(function (response) {
+        console.log(response)
+        console.log(item.part.number)
+        console.log(item.count)
+      })
+    ));
     handleNext()
   }
 
@@ -98,7 +142,7 @@ export default function Checkout(props) {
       case 1:
         return <PaymentForm setPaymentInfo={setPaymentInfo}/>;
       case 2:
-        return <Review shippingInfo={shippingInfo} paymentInfo={paymentInfo} cart={cart} productPrice={productPrice}/>;
+        return <Review shippingPrice={shippingPrice} shippingInfo={shippingInfo} paymentInfo={paymentInfo} cart={cart} productPrice={productPrice}/>;
       default:
         throw new Error('Unknown step');
     }
