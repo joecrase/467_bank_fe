@@ -1,0 +1,32 @@
+.background{
+    background-color:white;
+    padding-bottom: 50vh;
+}
+
+.shippingCost {
+    margin:2vh
+}
+
+.orderTable {
+    padding-top: 2vh;
+    padding-right: 1vh;
+    padding-left: 1vh;
+}
+
+.partTable {
+    padding: 2vh
+}
+
+.detailPanel {
+    text-align: center;
+    background-color: black;
+}
+
+.selectField{
+    margin-left: 15%;
+    margin-top: 10%;
+}
+
+.textField{
+    margin-top: 5%
+}

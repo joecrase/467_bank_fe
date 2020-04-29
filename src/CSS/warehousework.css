@@ -1,0 +1,77 @@
+.workerTitle {
+    color: white;
+    background-color: blue;
+    width: 100%;
+    height: 75px;
+    font-size: 30px;
+    padding: 20px;
+    border-style: dashed;
+}
+
+.workerTable {
+    margin-top: 50px;
+    margin-left: 40px;
+    display: table;
+    width: 90%;
+}
+
+.tableRow {
+    display: table-row;
+}
+
+.tableCell {
+    border-style: solid;
+    padding: 10px;
+    font-size: 1.7vw;
+    text-align: center;
+    display: table-cell;
+}
+
+.specialCaseCell {
+    max-width: 600px;
+}
+
+.tableRowTitles {
+    display: table-row;
+    font-weight: 1000;
+}
+
+.viewOrderBut {
+    margin-left: 20px;
+}
+
+.productTable {
+    display: table
+}
+
+.newTable {
+    padding: 10px;
+    font-size: 1.7vw;
+    text-align: center;
+    display: table;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    width: 200%;
+}
+
+.tableRowGroup {
+    display: table-row-group
+}
+
+.hidden {
+    display: none !important;
+}
+
+.fillOrderButton {
+    display: block;
+    margin: auto;
+    margin-bottom: 20px;
+}
+
+.green {
+    background-color: green;
+}
+
+.red {
+    background-color: red;
+}
