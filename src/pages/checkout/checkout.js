@@ -53,6 +53,31 @@ const useStyles = makeStyles((theme) => ({
 
 const steps = ['Shipping address', 'Payment details', 'Review your order'];
 
+function creatOrderData(
+    cart,
+    authorizationNumber,
+    weight,
+    priceTotal,
+    orderStatus
+) {
+
+    let cartFormated = cart.map((value,key) => {
+      return {
+        amount: value.count,
+        partID: value["part"].number
+      }
+    })
+
+    cart = cartFormated;
+
+    console.log("cart to be sent")
+    console.log(cart)
+
+
+    return { cart, authorizationNumber, weight, priceTotal, orderStatus };
+}
+
+
 export default function Checkout(props) {
     const classes = useStyles();
     const [activeStep, setActiveStep] = React.useState(0);
@@ -63,8 +88,7 @@ export default function Checkout(props) {
     const [fullWeight, setFullWeight] = React.useState(
         props.location.state.fullWeight
     );
-    const [shippingPrice, setShippingPrice] = React.useState(
-    );
+    const [shippingPrice, setShippingPrice] = React.useState();
     const [shippingInfo, setShippingInfo] = React.useState({
         firstName: '',
         lastName: '',
@@ -103,9 +127,17 @@ export default function Checkout(props) {
     const handleBack = () => {
         setActiveStep(activeStep - 1);
     };
-    //TODO look back at this with jospeh
+
     async function makeAuthorization() {
-        //TODO, make autho order on backend and deincrements inventory of items
+        let authorizationNumber;
+        let weight = fullWeight;
+        let priceTotal = productPrice + shippingPrice;
+        let orderStatus = 'authorized';
+        let customerId = 1; // Id of the customer making the order
+
+        console.log('Cart Contents');
+        console.log(cart);
+
         console.log('Make the order call here with the given info');
         await axios
             .post('http://localhost:8080/creditcard/auth/', {
@@ -116,7 +148,8 @@ export default function Checkout(props) {
             })
             .then(function (response) {
                 console.log('Autho made');
-                console.log(response);
+                console.log(response.data);
+                authorizationNumber = response.data.authorization;
             })
             .catch(function (err) {
                 console.log(err);
@@ -132,14 +165,33 @@ export default function Checkout(props) {
                         },
                     ])
                     .then(function (response) {
-                        console.log(response);
-                        console.log(item.part.number);
-                        console.log(item.count);
+                        console.log(response.data);
                     })
             )
         );
 
-        // Place order
+        // TODO: Add order to data base
+
+        let order = creatOrderData(
+            cart,
+            authorizationNumber,
+            weight,
+            priceTotal,
+            orderStatus
+        );
+
+        console.log('order to submit');
+        console.log(order);
+
+        await axios
+            .post('http://localhost:8080/order/' + customerId, order)
+            .then(function (response) {
+                console.log('Order made');
+                console.log(response.data);
+            })
+            .catch(function (err) {
+                console.log(err);
+            });
 
         handleNext();
     }
