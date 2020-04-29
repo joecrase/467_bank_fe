@@ -6,35 +6,36 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Grid from '@material-ui/core/Grid';
 
-const products = [
-  { name: 'Product 1', desc: 'A nice thing', price: '$9.99' },
-  { name: 'Product 2', desc: 'Another thing', price: '$3.45' },
-  { name: 'Product 3', desc: 'Something else', price: '$6.51' },
-  { name: 'Product 4', desc: 'Best thing of all', price: '$14.11' },
-  { name: 'Shipping', desc: '', price: 'Free' },
-];
-const addresses = ['1 Material-UI Drive', 'Reactville', 'Anytown', '99999', 'USA'];
-const payments = [
-  { name: 'Card type', detail: 'Visa' },
-  { name: 'Card holder', detail: 'Mr John Smith' },
-  { name: 'Card number', detail: 'xxxx-xxxx-xxxx-1234' },
-  { name: 'Expiry date', detail: '04/2024' },
-];
-
 const useStyles = makeStyles((theme) => ({
   listItem: {
     padding: theme.spacing(1, 0),
   },
   total: {
     fontWeight: 700,
+    marginRight: theme.spacing(2),
+    marginLeft: theme.spacing(2)
   },
   title: {
     marginTop: theme.spacing(2),
   },
 }));
 
-export default function Review() {
+export default function Review(props) {
+  const payments = [
+    { name: 'Card type', detail: 'Visa' },
+    { name: 'Card holder', detail: props.paymentInfo.cardName },
+    { name: 'Card number', detail: props.paymentInfo.cardNumber },
+    { name: 'Expiry date', detail: props.paymentInfo.expDate }, 
+  ];
   const classes = useStyles();
+
+  React.useEffect(() => {
+    console.log("Here is everything regarding the review")
+    console.log(props.shippingInfo)
+    console.log(props.paymentInfo)
+    console.log(props.cart)
+    console.log(props.productPrice)
+  }, []);
 
   return (
     <React.Fragment>
@@ -42,16 +43,24 @@ export default function Review() {
         Order summary
       </Typography>
       <List disablePadding>
-        {products.map((product) => (
+        {props.cart.map((product) => (
           <ListItem className={classes.listItem} key={product.name}>
-            <ListItemText primary={product.name} secondary={product.desc} />
-            <Typography variant="body2">{product.price}</Typography>
+            <ListItemText primary={"Want " + product.count} secondary={product.part.description} />
+            <Typography variant="body2">{product.part.price * product.count}</Typography>
           </ListItem>
         ))}
         <ListItem className={classes.listItem}>
-          <ListItemText primary="Total" />
+          <ListItemText primary="Product Price" />
           <Typography variant="subtitle1" className={classes.total}>
-            $34.06
+            {props.productPrice/* TODO get shipping price and display it alongside here*/}
+          </Typography>
+          <ListItemText primary="Shipping Price" />
+          <Typography variant="subtitle2" className={classes.total}>
+            {props.shippingPrice/* TODO get shipping price and display it alongside here*/}
+          </Typography>
+          <ListItemText primary="Total Price"/>
+          <Typography variant="subtitle3" className={classes.total}>
+            {props.shippingPrice + props.productPrice/* TODO get shipping price and display it alongside here*/}
           </Typography>
         </ListItem>
       </List>
@@ -60,8 +69,8 @@ export default function Review() {
           <Typography variant="h6" gutterBottom className={classes.title}>
             Shipping
           </Typography>
-          <Typography gutterBottom>John Smith</Typography>
-          <Typography gutterBottom>{addresses.join(', ')}</Typography>
+          <Typography gutterBottom>{props.shippingInfo.firstName} {props.shippingInfo.lastName}</Typography>
+        <Typography gutterBottom>{props.shippingInfo.address1}, {props.shippingInfo.city}, {props.shippingInfo.zip}, {props.shippingInfo.country} </Typography>
         </Grid>
         <Grid item container direction="column" xs={12} sm={6}>
           <Typography variant="h6" gutterBottom className={classes.title}>

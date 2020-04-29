@@ -3,6 +3,7 @@ import TextField from '@material-ui/core/TextField';
 import './recieve.css';
 import { Button } from '@material-ui/core';
 import axios from 'axios';
+import CustomToolbar from './CustomToolbar';
 
 export default class Recieve extends Component {
   constructor(props) {
@@ -65,6 +66,8 @@ export default class Recieve extends Component {
 
   render() {
     return (
+      <div>
+        <CustomToolbar/>
       <div className = "row">
         <div className = "col-sm-1" />
         <div className = "col-md-8 col-sm-11 col-xs-12">
@@ -84,6 +87,7 @@ export default class Recieve extends Component {
           <Button className="button" variant="contained" color='primary' onClick={ this.handleSubmit }>Submit Recieved Product</Button>
         </div>
         <div className = "col-sm-1 col-xs-0" />
+      </div>
       </div>
     )
   }
