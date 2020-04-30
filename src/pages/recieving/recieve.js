@@ -64,6 +64,7 @@ export default class Recieve extends Component {
     })  
   }
 
+
   render() {
     return (
       <div>

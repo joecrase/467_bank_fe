@@ -21,24 +21,26 @@ export default class Parts extends Component {
       parts: [],
       fullPrice: 0,
       fullWeight: 0,
-      quantity: 1,
+      quantity: [],
     }
     this.handleChange = this.handleChange.bind(this)
   }
 
-  callAllProducts()
+  async callAllProducts()
   {
-    axios.get('http://localhost:8080/inventory/all')
+    await axios.get('http://localhost:8080/inventory/all')
     .then(response => {
-      console.log(response)
       this.setState({parts: response.data});
     });
+
+    this.state.parts.forEach(part => this.state.quantity.push(0));
   }
 
-  addToCart(part) {
-    console.log("You want this many items " + this.state.quantity)
+  addToCart(part,key) {
+    console.log("You want this many items " + this.state.quantity[key])
+    console.log(this.state.quantity);
     var temp =[]
-    for(var i = 0; i < this.state.quantity; i++)
+    for(var i = 0; i < this.state.quantity[key]; i++)
     {
       temp.push(part)
     }
@@ -48,16 +50,24 @@ export default class Parts extends Component {
 
   componentDidMount() {
     document.title = "CALF Co. Parts Store";
-    this.callAllProducts()
+    console.log("entering component did mount")
+    this.callAllProducts();
+
   }
 
-  handleChange(event) {
-    //console.log(event)
-    //console.log("You want this many items " + event.target.value)
+  handleChange(event, key) {
+
+   
+
     const re = /^[0-9\b]+$/;
 
     if (event.target.value === '' || re.test(event.target.value)) {
-       this.setState({quantity: event.target.value})
+
+      let temp = this.state.quantity;
+      temp[key] = event.target.value;
+       this.setState({
+         quantity: temp
+       })
        console.log("state is set")
     }
     else
@@ -67,6 +77,7 @@ export default class Parts extends Component {
   }
     
   render() {
+    console.log("rerendering");
 
     return (
       <React.Fragment>
@@ -74,8 +85,8 @@ export default class Parts extends Component {
         <main>
           <Container className="cardGrid" maxWidth="lg">
             <Grid container spacing={4}>
-              {this.state.parts.map((parts) => (
-                <Grid item key={parts} xs={12} sm={6} md={4} lg={3}>
+              {this.state.parts.map((parts, key) => (
+                <Grid item key={key} xs={12} sm={6} md={4} lg={3}>
                   <Card className="card">
                     <CardMedia
                       className="cardMedia"
@@ -97,10 +108,10 @@ export default class Parts extends Component {
                       </Typography>
                     </CardContent>
                     <CardActions>
-                      <Button size="small" onClick={e => this.addToCart(parts)}>
+                      <Button size="small" onClick={e => this.addToCart(parts,key)}>
                         Add To Cart
                       </Button>
-                      <input type="text" value={this.state.quantity} onChange={this.handleChange}/>
+                      <input type="text" value={this.state.quantity[key]} onChange={e => this.handleChange(e,key)}/>
                     </CardActions>
                   </Card>
                 </Grid>
