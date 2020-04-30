@@ -8,7 +8,7 @@ import Parts from './pages/parts.js';
 import Toolbar from './components/toolbar.js';
 import Cart from './pages/cart.js';
 import Recieve from './pages/recieving/recieve.js';
-import WareWorkStation from './pages/warehouse/warehousework.js';
+import WareWorkStation from './components/warehousework.js';
 import WareHouseFillList from './components/warehouseFillList.js';
 import WareHouseShipping from './components/warehouseshipping.js';
 import AdminView from './pages/admin/adminView.js';
