@@ -17,7 +17,14 @@ function WareWorkStation() {
     axios.get('http://localhost:8080/order/all')
     .then(function (response) {
       console.log(response)
-      setAllOrders(response.data)
+      let temp = response.data.sort(function (key1, key2) {
+        if (key1.datePurchased > key2.datePurchased) return -1;
+        else if (key1 < key2) return +1;
+        else return 0;
+      })
+      setAllOrders(temp.filter(entry => {
+          return (entry.orderStatus !== "shipped");
+      }))
   });
   }
 
